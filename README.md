@@ -1,4 +1,6 @@
 time-rest
 =========
 
-time-rest
+install
+------
+    sudo ./install.sh

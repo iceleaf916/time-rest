@@ -27,6 +27,8 @@ import gtk
 import cairo
 import threading
 from dtk.ui.utils import color_hex_to_cairo
+from daemon import Daemon
+import sys
 
 WORK_SECOND = 3600
 REST_SECOND = 60
@@ -123,10 +125,28 @@ class ListenTime(threading.Thread):
             self.widget.show_all()
             time.sleep(self.show_second)
 
-if __name__ == '__main__':
-    gtk.gdk.threads_init()
-    win = FullScreenWindow()
-    td = ListenTime(win, WORK_SECOND, REST_SECOND)
-    td.setDaemon(True)
-    td.start()
-    gtk.main()
+class RunDaemon(Daemon):
+    def _run(self):
+        gtk.gdk.threads_init()
+        win = FullScreenWindow()
+        td = ListenTime(win, WORK_SECOND, REST_SECOND)
+        td.setDaemon(True)
+        td.start()
+        gtk.main()
+
+if __name__ == "__main__":
+    daemon = RunDaemon('/tmp/time-rest-daemon.pid')
+    if len(sys.argv) == 2:
+        if 'start' == sys.argv[1]:
+            daemon.start()
+        elif 'stop' == sys.argv[1]:
+            daemon.stop()
+        elif 'restart' == sys.argv[1]:
+            daemon.restart()
+        else:
+            print "Unknown command"
+            sys.exit(2)
+        sys.exit(0)
+    else:
+        print "usage: %s start|stop|restart" % sys.argv[0]
+        sys.exit(2)
