@@ -1,5 +1,3 @@
-time-rest
-=========
 
 install
 ------
