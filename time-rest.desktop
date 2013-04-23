@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=TimeRest
 Comment=time to rest
-Exec=time-rest
+Exec=time-rest restart
 Icon=fcitx
 Terminal=false
 Type=Application
